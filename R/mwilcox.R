@@ -16,13 +16,20 @@
 #'
 #'
 ## 1. modified wilxon test
-mod.wilcox.test<- function(x) {
-  n <- length(x)
+mod.wilcox.test<- function(x, conf.level = 0.95, ...) {
+  if(!is.numeric(x)) stop("'x' must be numeric")
+  if(length(x) < 1L)
+    stop("not enough (finite) 'x' observations")
+  METHOD <- "Modified Wilcoxon signed rank test"
+  DNAME <- deparse(substitute(x))
+  alternative <- "not symmetric"
+
+  n <- as.double(length(x))
   m <- mean(x)
   sigma2 <- var(x)
   xc <- x-m
   ## Test statistic
-  W <- as.numeric(wilcox.test(x,mu=m)$statistic)
+  STATISTIC <- setNames(as.numeric(wilcox.test(x,mu=m)$statistic), "W")
 
   ## Tn selection
   r <- quantile(x, c(0.25, 0.75))
@@ -46,6 +53,15 @@ mod.wilcox.test<- function(x) {
     (n-1)*(n-2)*(n-3)*(n-4)*sigma2/(4*n)*(hat_theta)^2
 
   ## The resulting p-value
-  pval <- 2*(1-pnorm(abs(E-W)/sqrt(V)))
-  return(list("W"=W, "var"=V, "p.value"=pval))
+  pval <- 2*(1-pnorm(abs(E-STATISTIC)/sqrt(V)))
+
+  RVAL <- list(statistic = STATISTIC,
+               var = V,
+               p.value = as.numeric(pval),
+               method = METHOD,
+               data.name = DNAME,
+               alternative = alternative)
+  class(RVAL) <- "htest"
+  RVAL
+  #return(list("STATISTIC"=STATISTIC, "var"=V, "p.value"=pval))
 }

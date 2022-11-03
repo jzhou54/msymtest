@@ -18,11 +18,18 @@
 
 ## modified sign test
 mod.sign.test <- function(x) {
+  if(!is.numeric(x)) stop("'x' must be numeric")
+  if(length(x) < 1L)
+    stop("not enough (finite) 'x' observations")
+  METHOD <- "Modified sign test"
+  DNAME <- deparse(substitute(x))
+  alternative <- "not symmetric"
+
+  n <- as.double(length(x))
   m <- mean(x)
-  n <- length(x)
 
   ## Test statistic
-  S <- sum(1*(x<m))
+  STATISTIC <- setNames(sum(1*(x<m)),"S")
 
   ## Estimation of w
   a <- 1 * (x>m-n^(-1/5)) * (x < m+n^(-1/5))
@@ -38,6 +45,15 @@ mod.sign.test <- function(x) {
   V <- 1/4 + var(x)*(hat_w)^2 + 2*hat_w*CE
 
   # The resulting p-value
-  pval <- 2*(1-pnorm(abs(S-n/2)/sqrt(n*V)))
-  return(list("S"=S, "var"=n*V, "p.value"=pval ))
+  pval <- 2*(1-pnorm(abs(STATISTIC-n/2)/sqrt(n*V)))
+
+  RVAL <- list(statistic = STATISTIC,
+               var = V,
+               p.value = as.numeric(pval),
+               method = METHOD,
+               data.name = DNAME,
+               alternative = alternative)
+  class(RVAL) <- "htest"
+  RVAL
+  #return(list("STATISTIC"=STATISTIC, "var"=n*V, "p.value"=pval ))
 }
