@@ -55,5 +55,4 @@ mod.sign.test <- function(x) {
                alternative = alternative)
   class(RVAL) <- "htest"
   RVAL
-  #return(list("STATISTIC"=STATISTIC, "var"=n*V, "p.value"=pval ))
 }
