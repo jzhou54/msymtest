@@ -1,11 +1,15 @@
-#' Title
+#' @title
+#' Modified symmetric test
 #'
-#' @param x
-#' @param y
-#' @param paired
+#' @description
+#' Provides one symmetric test that incorporated 2 methods, "W" and "S". Also, paired data can be tested.
+#'
+#' @param x data set to be tested
+#' @param y another data set
+#' @param paired logical. whether data set x and y are paired
 #' @param alternative
 #' a character string specifying the alternative hypothesis, must be one of "two sided" (default), "greater", or "less".
-#' greater: test whether positively skewed (right-skewed)
+#' greater: test whether positively skewed (right-skewed),
 #' less : test whether negatively skewed (left-skewed)
 #' @param method a character string specifying which symmetric test to be used, "W" is modified wilcoxon sign rank test,
 #' and "S" is modified sign test.
@@ -14,6 +18,13 @@
 #' @export
 #'
 #' @examples
+#' x = rchisq(100,1)
+#' y = rchisq(100,1)
+#' mod.sym.test(x, method="W")
+#' mod.sym.test(x, method="S", alternative="greater")
+#'
+#' mod.sym.test(x, y, paired=T, method="W")
+#'
 mod.sym.test <- function(x, y=NULL, paired = FALSE,
            alternative = c("two.sided", "less", "greater"),
            method = "W") {

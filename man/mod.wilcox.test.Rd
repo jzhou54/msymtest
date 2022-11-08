@@ -4,7 +4,7 @@
 \alias{mod.wilcox.test}
 \title{Modified Wilcoxon test when the center of symmetry is unknown.}
 \usage{
-mod.wilcox.test(x)
+mod.wilcox.test(x, conf.level = 0.95, ...)
 }
 \arguments{
 \item{x}{data set need to be tested}
