@@ -7,8 +7,8 @@
 #' a character string specifying the alternative hypothesis, must be one of "two sided" (default), "greater", or "less".
 #' greater: test whether positively skewed (right-skewed)
 #' less : test whether negatively skewed (left-skewed)
-#' @param method
-#' @param ...
+#' @param method a character string specifying which symmetric test to be used, "W" is modified wilcoxon sign rank test,
+#' and "S" is modified sign test.
 #'
 #' @return
 #' @export
@@ -16,7 +16,7 @@
 #' @examples
 mod.sym.test <- function(x, y=NULL, paired = FALSE,
            alternative = c("two.sided", "less", "greater"),
-           method = "W",...) {
+           method = "W") {
     alternative <- match.arg(alternative)
     alt.text <- switch (alternative,
                         "two.sided" = "not symmetric",
