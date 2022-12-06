@@ -16,7 +16,7 @@
 #'
 #'
 ## 1. modified wilxon test
-mod.wilcox.test<- function(x, conf.level = 0.95, ...) {
+mod.wilcox.test<- function(x) {
   if(!is.numeric(x)) stop("'x' must be numeric")
   if(length(x) < 1L)
     stop("not enough (finite) 'x' observations")
