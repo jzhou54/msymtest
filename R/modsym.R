@@ -20,12 +20,12 @@
 #' @examples
 #' x = rchisq(100,1)
 #' y = rchisq(100,1)
-#' mod.sym.test(x, method="W")
-#' mod.sym.test(x, method="S", alternative="greater")
+#' mod.sym.test(x, method="wilcox")
+#' mod.sym.test(x, method="sign", alternative="greater")
 #'
-#' mod.sym.test(x, y, paired=T, method="W")
+#' mod.sym.test(x, y, method="wilcox")
 #'
-mod.sym.test <- function(x, y=NULL, paired = FALSE,
+mod.sym.test <- function(x, y=NULL,
            alternative = c("two.sided", "less", "greater"),
            method = "W") {
     alternative <- match.arg(alternative)
@@ -38,21 +38,15 @@ mod.sym.test <- function(x, y=NULL, paired = FALSE,
       if(!is.numeric(y)) stop("'y' must be numeric")
       DNAME <- paste(deparse(substitute(x)), "and",
                      deparse(substitute(y)))
-      if(paired) {
-        if(length(x) != length(y))
-          stop("'x' and 'y' must have the same length")
-        OK <- complete.cases(x, y)
-        x <- x[OK] - y[OK]
-        y <- NULL
-      }
-      # else {
-      #   x <- x[is.finite(x)]
-      #   y <- y[is.finite(y)]
-      # }
+      
+      if(length(x) != length(y))
+         stop("'x' and 'y' must have the same length")
+       OK <- complete.cases(x, y)
+       x <- x[OK] - y[OK]
+       y <- NULL
+     
    }else {
       DNAME <- deparse(substitute(x))
-      if(paired)
-        stop("'y' is missing for paired test")
       x <- x[is.finite(x)]
    }
 
@@ -64,7 +58,7 @@ mod.sym.test <- function(x, y=NULL, paired = FALSE,
     xc <- x-m
 
 
-    if (method == "W"){
+    if (method == "wilcox"){
       METHOD <- "Modified wilcoxon signed rank test"
 
       ## Test statistic
@@ -98,7 +92,7 @@ mod.sym.test <- function(x, y=NULL, paired = FALSE,
                       "less" = 1 - pnorm(-(E -STATISTIC)/sqrt(V))
                       )
 
-    } else if (method == "S") {
+    } else if (method == "sign") {
       METHOD <- "Modified sign test"
 
       ## Test statistic
